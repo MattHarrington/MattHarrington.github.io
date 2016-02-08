@@ -1,0 +1,36 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>PEP (Pointer Events Polyfill)</title>
+  <meta name="viewport" content="width=device-width">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="https://code.jquery.com/pep/0.4.1/pep.js"></script>
+</head>
+<body>
+<ul>
+  <li><a id="a1" touch-action="none" href="http://www.wikipedia.org">Search</a></li>
+</ul>
+<script>
+    $jq = jQuery;
+    var cancelNext;
+    
+    $jq('#a1').on('pointerdown', function(e){
+            console.log('That was a ' + e.originalEvent.pointerType + ' ' + e.type + ' on a ' + e.target.nodeName);       
+            console.log('--> Show menu items now');  
+            // preventDefault() does not appear to stop click event when used with pointerdown
+            // See https://lists.w3.org/Archives/Public/public-pointer-events/2012OctDec/0075.html 
+            if (e.originalEvent.pointerType == 'touch')
+            {
+                cancelNext = true; 
+            }
+        }).on('click', function(e){
+            if (cancelNext) {       
+                // Link was touched, so don't navigate
+                e.preventDefault();
+            }
+        cancelNext = false;
+        }
+    );
+</script>
+</body>
+</html>
